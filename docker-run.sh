@@ -3,9 +3,9 @@
 set -e
 
 BASE_URL=${BASE_URL:-/}
-NGINX_ROOT=/usr/share/nginx/html
+NGINX_ROOT=/app
 INDEX_FILE=$NGINX_ROOT/index.html
-NGINX_CONF=/etc/nginx/nginx.conf
+NGINX_CONF=/opt/bitnami/nginx/conf/nginx.conf
 
 if [[ "${BASE_URL}" != "/" ]]; then
   sed -i "s|location / {|location $BASE_URL {|g" $NGINX_CONF
@@ -36,7 +36,7 @@ if [[ "${QUERY_CONFIG_ENABLED}" = "true" ]]; then
   sed -i "s|queryConfigEnabled: false|queryConfigEnabled: true|" $INDEX_FILE
 fi
 
-exec nginx -g 'daemon off;'
+# exec nginx -g 'daemon off;'
 
 ## Gzip after replacements
 #find /usr/share/nginx/html/ -type f -regex ".*\.\(html\|js\|css\)" -exec sh -c "gzip < {} > {}.gz" \;

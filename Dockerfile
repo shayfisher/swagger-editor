@@ -1,21 +1,19 @@
-FROM nginx:1.21.5-alpine
+FROM bitnami/nginx:1.21.5
 
-LABEL maintainer="fehguy"
+LABEL maintainer="fisher"
 
 ENV BASE_URL ""
 
-COPY nginx.conf /etc/nginx/
+COPY nginx.conf /opt/bitnami/nginx/conf/nginx.conf
+WORKDIR /app
 
-COPY ./index.html /usr/share/nginx/html/
-COPY ./dist/oauth2-redirect.html /usr/share/nginx/html/
-COPY ./dist/* /usr/share/nginx/html/dist/
-COPY ./docker-run.sh /usr/share/nginx/
+COPY ./index.html .
+COPY ./dist/oauth2-redirect.html .
+COPY ./dist/* ./dist/
+COPY ./docker-run.sh .
 
 
-RUN chmod +x /usr/share/nginx/docker-run.sh && \
-    chmod -R a+rw /usr/share/nginx && \
-    chmod -R a+rw /etc/nginx
+RUN /app/docker-run.sh
 
 EXPOSE 8080
 
-CMD ["sh", "/usr/share/nginx/docker-run.sh"]
